@@ -812,13 +812,6 @@
                                         fontFamily: 'inherit'
                                     }}
                                 />
-                                <div style={{ 
-                                    fontSize: '0.85rem', 
-                                    color: '#6c757d', 
-                                    marginTop: '0.5rem' 
-                                }}>
-                                    Leave empty to clear the community name
-                                </div>
                             </div>
                         </div>
 
@@ -1406,6 +1399,9 @@
                             <button className={`tab ${activeTab === 'chat' ? 'active' : ''}`} onClick={() => setActiveTab('chat')}>
                                 💬 Ask Assistant
                             </button>
+                            <button className={`tab ${activeTab === 'reports' ? 'active' : ''}`} onClick={() => setActiveTab('reports')}>
+                                📊 Custom Reports
+                            </button>
                         </div>
 
                         {message && (
@@ -1795,6 +1791,50 @@
                                             Send
                                         </button>
                                     </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'reports' && (
+                            <div>
+                                <div style={{ marginBottom: '1.5rem', padding: '1rem', background: '#f8f9fa', borderRadius: '8px' }}>
+                                    <strong>📊 Custom Reports</strong>
+                                    <p style={{ margin: '0.5rem 0 0 0', color: '#6c757d', fontSize: '0.9rem' }}>
+                                        Generate custom reports and analytics for your HOA community.
+                                    </p>
+                                </div>
+
+                                <div className="card" style={{ marginBottom: '1rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                        <div>
+                                            <h3 style={{ margin: '0 0 0.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                💰 Late Fee Summary
+                                            </h3>
+                                            <p style={{ margin: 0, color: '#6c757d', fontSize: '0.9rem' }}>
+                                                View a comprehensive summary of late fees across your community
+                                            </p>
+                                        </div>
+                                        <button 
+                                            className="button"
+                                            onClick={() => alert('Late fee summary report will be implemented soon!')}
+                                        >
+                                            Generate Report
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div style={{ 
+                                    padding: '2rem', 
+                                    textAlign: 'center', 
+                                    color: '#6c757d',
+                                    background: '#f8f9fa',
+                                    borderRadius: '8px',
+                                    border: '2px dashed #dee2e6'
+                                }}>
+                                    <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📈</div>
+                                    <p style={{ margin: 0, fontSize: '0.95rem' }}>
+                                        More custom reports coming soon...
+                                    </p>
                                 </div>
                             </div>
                         )}

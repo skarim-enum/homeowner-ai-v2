@@ -580,7 +580,13 @@
             });
 
             if (!response.ok) {
-                const error = await response.json();
+                let error;
+                try {
+                    error = await response.json();
+                } catch (parseError) {
+                    // If response is not JSON (e.g., HTML 404 page)
+                    throw new Error(`Request failed with status ${response.status}`);
+                }
                 throw new Error(error.error || 'Request failed');
             }
 
@@ -1020,6 +1026,11 @@
             const [inferCommunityName, setInferCommunityName] = useState(true); // Auto-extract by default
             const [communityName, setCommunityName] = useState('');
             
+            // Reports state
+            const [reportData, setReportData] = useState(null);
+            const [generatingReport, setGeneratingReport] = useState(false);
+            const [reportError, setReportError] = useState(null);
+            
             // Chatbot state
             const [messages, setMessages] = useState([]);
             const [inputValue, setInputValue] = useState('');
@@ -1321,6 +1332,36 @@
                 setEditCommunityName('');
             };
 
+            // Report functions
+            const handleGenerateLateFeeReport = async () => {
+                setGeneratingReport(true);
+                setReportError(null);
+                setReportData(null);
+                setMessage('');
+
+                try {
+                    console.log('📊 Generating Late Fee Summary report...');
+                    
+                    const response = await apiCall('/reports/late-fee-summary', {
+                        method: 'POST'
+                    });
+
+                    if (response.success) {
+                        setReportData(response.data);
+                        setMessage(`✅ Report generated successfully! Analyzed ${response.processedDocuments} documents.`);
+                        console.log('✅ Report data:', response.data);
+                    } else {
+                        throw new Error(response.error || 'Failed to generate report');
+                    }
+                } catch (err) {
+                    console.error('❌ Error generating report:', err);
+                    setReportError(err.message);
+                    setMessage(`❌ Error generating report: ${err.message}`);
+                } finally {
+                    setGeneratingReport(false);
+                }
+            };
+
             // Chatbot functions
             const scrollToBottom = () => {
                 messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -1398,6 +1439,9 @@
                             </button>
                             <button className={`tab ${activeTab === 'chat' ? 'active' : ''}`} onClick={() => setActiveTab('chat')}>
                                 💬 Ask Assistant
+                            </button>
+                            <button className={`tab ${activeTab === 'reports' ? 'active' : ''}`} onClick={() => setActiveTab('reports')}>
+                                📊 Custom Reports
                             </button>
                         </div>
 
@@ -1789,6 +1833,137 @@
                                         </button>
                                     </div>
                                 </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'reports' && (
+                            <div>
+                                <div style={{ marginBottom: '1.5rem', padding: '1rem', background: '#f8f9fa', borderRadius: '8px' }}>
+                                    <strong>📊 Custom Reports</strong>
+                                    <p style={{ margin: '0.5rem 0 0 0', color: '#6c757d', fontSize: '0.9rem' }}>
+                                        Generate custom reports and analytics for your HOA community.
+                                    </p>
+                                </div>
+
+                                <div className="card" style={{ marginBottom: '1rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                        <div>
+                                            <h3 style={{ margin: '0 0 0.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                💰 Late Fee Summary
+                                            </h3>
+                                            <p style={{ margin: 0, color: '#6c757d', fontSize: '0.9rem' }}>
+                                                AI-powered extraction of HOA fees and late charges from your documents
+                                            </p>
+                                        </div>
+                                        <button 
+                                            className="button"
+                                            onClick={handleGenerateLateFeeReport}
+                                            disabled={generatingReport}
+                                        >
+                                            {generatingReport ? 'Generating...' : 'Generate Report'}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {generatingReport && (
+                                    <div style={{ 
+                                        padding: '2rem', 
+                                        textAlign: 'center',
+                                        background: '#f8f9fa',
+                                        borderRadius: '8px',
+                                        marginBottom: '1rem'
+                                    }}>
+                                        <div className="typing-indicator" style={{ display: 'inline-flex' }}>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                        </div>
+                                        <p style={{ marginTop: '1rem', color: '#6c757d' }}>
+                                            Analyzing documents with AI... This may take a moment.
+                                        </p>
+                                    </div>
+                                )}
+
+                                {reportData && !generatingReport && (
+                                    <div className="card" style={{ marginBottom: '1rem' }}>
+                                        <h3 style={{ marginBottom: '1rem' }}>📊 Report Results</h3>
+                                        <div style={{ overflowX: 'auto' }}>
+                                            <table style={{ 
+                                                width: '100%', 
+                                                borderCollapse: 'collapse',
+                                                fontSize: '0.9rem'
+                                            }}>
+                                                <thead>
+                                                    <tr style={{ background: '#f8f9fa', borderBottom: '2px solid #dee2e6' }}>
+                                                        <th style={{ padding: '0.75rem', textAlign: 'left' }}>Document</th>
+                                                        <th style={{ padding: '0.75rem', textAlign: 'left' }}>Community</th>
+                                                        <th style={{ padding: '0.75rem', textAlign: 'left' }}>HOA Fee</th>
+                                                        <th style={{ padding: '0.75rem', textAlign: 'left' }}>HOA Due Date</th>
+                                                        <th style={{ padding: '0.75rem', textAlign: 'left' }}>Late Fee</th>
+                                                        <th style={{ padding: '0.75rem', textAlign: 'left' }}>Late Fee Due Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {reportData.map((row, idx) => (
+                                                        <tr key={idx} style={{ borderBottom: '1px solid #e9ecef' }}>
+                                                            <td style={{ padding: '0.75rem' }}>
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                                    📄 {row.filename}
+                                                                </div>
+                                                            </td>
+                                                            <td style={{ padding: '0.75rem' }}>
+                                                                {row.community_name !== 'N/A' && row.community_name !== 'COMMUNITY NAME' && (
+                                                                    <span style={{ 
+                                                                        padding: '0.25rem 0.5rem',
+                                                                        background: '#e7f3ff',
+                                                                        borderRadius: '4px',
+                                                                        fontSize: '0.85rem'
+                                                                    }}>
+                                                                        🏘️ {row.community_name}
+                                                                    </span>
+                                                                )}
+                                                                {(row.community_name === 'N/A' || row.community_name === 'COMMUNITY NAME') && (
+                                                                    <span style={{ color: '#6c757d' }}>{row.community_name}</span>
+                                                                )}
+                                                            </td>
+                                                            <td style={{ padding: '0.75rem', fontWeight: row.hoa_fee !== 'Not found' && row.hoa_fee !== 'N/A' && row.hoa_fee !== 'Error' ? '600' : 'normal' }}>
+                                                                {row.hoa_fee}
+                                                            </td>
+                                                            <td style={{ padding: '0.75rem' }}>
+                                                                {row.hoa_due_date}
+                                                            </td>
+                                                            <td style={{ padding: '0.75rem', fontWeight: row.late_fee !== 'Not found' && row.late_fee !== 'N/A' && row.late_fee !== 'Error' ? '600' : 'normal', color: row.late_fee !== 'Not found' && row.late_fee !== 'N/A' && row.late_fee !== 'Error' ? '#dc3545' : 'inherit' }}>
+                                                                {row.late_fee}
+                                                            </td>
+                                                            <td style={{ padding: '0.75rem' }}>
+                                                                {row.late_fee_due_date}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div style={{ marginTop: '1rem', padding: '0.75rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '0.85rem', color: '#6c757d' }}>
+                                            ℹ️ Data extracted using AI. Please verify accuracy against original documents.
+                                        </div>
+                                    </div>
+                                )}
+
+                                {!reportData && !generatingReport && (
+                                    <div style={{ 
+                                        padding: '2rem', 
+                                        textAlign: 'center', 
+                                        color: '#6c757d',
+                                        background: '#f8f9fa',
+                                        borderRadius: '8px',
+                                        border: '2px dashed #dee2e6'
+                                    }}>
+                                        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📈</div>
+                                        <p style={{ margin: 0, fontSize: '0.95rem' }}>
+                                            Click "Generate Report" to analyze your documents
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>

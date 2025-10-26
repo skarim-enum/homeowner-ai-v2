@@ -616,5 +616,61 @@
       }
     ],
     "created_at": "2025-10-26T17:24:33.570Z"
+  },
+  {
+    "id": 60,
+    "user_id": 1,
+    "question": "What is the address of Pinecrest",
+    "answer": "I'm sorry, but the address of Pinecrest Meadows is not provided in the HOA documents you provided. If you have any other questions or need further assistance, feel free to ask!",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"},{\"id\":2,\"name\":\"Springmont Governing Documents.pdf\"}]",
+    "created_at": "2025-10-26T19:26:45.514Z"
+  },
+  {
+    "id": 61,
+    "user_id": 1,
+    "question": "What is the name of the community",
+    "answer": "The name of the community is Pinecrest Meadows.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T19:52:10.345Z"
+  },
+  {
+    "id": 62,
+    "user_id": 1,
+    "question": "What are the late fees",
+    "answer": "I'm sorry, but the information about late fees is not included in the provided HOA documents. If you have any other questions or need further assistance, feel free to ask!",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Springmont Governing Documents.pdf\"}]",
+    "created_at": "2025-10-26T19:57:40.881Z"
+  },
+  {
+    "id": 63,
+    "user_id": 1,
+    "question": "After each board meeting, owners are assessed a late fee. How much is the fee?",
+    "answer": "I'm sorry, but I couldn't find specific information about late fees being assessed to owners after board meetings in the provided HOA documents. It's recommended to refer to the association's specific rules and regulations or reach out to the association directly for clarification on late fees.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Springmont Governing Documents.pdf\"}]",
+    "created_at": "2025-10-26T19:59:30.031Z"
+  },
+  {
+    "id": 64,
+    "user_id": 1,
+    "question": "What is the name of the HOA",
+    "answer": "The name of the HOA is SPRINGMONT OWNERS ASSOCIATION, INC.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Springmont Governing Documents.pdf\"}]",
+    "created_at": "2025-10-26T20:20:48.562Z"
+  },
+  {
+    "id": 65,
+    "user_id": 1,
+    "question": "What is the address",
+    "answer": "I'm sorry, but the provided documents do not include the specific address you are looking for. If you have any other questions or need assistance on a different topic from the HOA documents, feel free to ask!",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Springmont Governing Documents.pdf\"}]",
+    "created_at": "2025-10-26T20:20:53.553Z"
+  },
+  {
+    "id": 66,
+    "user_id": 1,
+    "question": "What are the late fees",
+    "answer": "I'm sorry, but the document provided does not mention specific information about late fees. If you have any other questions or need assistance with something else, feel free to ask!",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Springmont Governing Documents.pdf\"}]",
+    "created_at": "2025-10-26T20:20:58.311Z"
   }
 ]
