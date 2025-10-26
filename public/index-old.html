@@ -1,0 +1,2049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resident Support AI</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .button-secondary {
+            background: #6c757d;
+        }
+
+        .button-danger {
+            background: #dc3545;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            color: #6c757d;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: 600;
+        }
+
+        .file-upload {
+            border: 3px dashed #e9ecef;
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-upload:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+
+        .file-upload.dragover {
+            border-color: #667eea;
+            background: #e7f3ff;
+        }
+
+        .chat-container {
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-left: auto;
+        }
+
+        .message.assistant {
+            background: white;
+            border: 1px solid #e9ecef;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            width: 100%;
+            min-width: 0; /* Prevents flex item from overflowing */
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .chat-input:disabled {
+            background: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        .document-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .document-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .document-info {
+            flex: 1;
+        }
+
+        .document-name {
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 0.25rem;
+        }
+
+        .document-meta {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+        }
+
+        .modal-title {
+            flex: 1;
+        }
+
+        .modal-title h2 {
+            font-size: 1.5rem;
+            color: #212529;
+            margin-bottom: 0.25rem;
+        }
+
+        .modal-title p {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-card {
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .summary-card.success {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+        }
+
+        .summary-card.failed {
+            background: #f8d7da;
+            border: 2px solid #f5c6cb;
+        }
+
+        .summary-card.total {
+            background: #d1ecf1;
+            border: 2px solid #bee5eb;
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .summary-number.success { color: #155724; }
+        .summary-number.failed { color: #721c24; }
+        .summary-number.total { color: #0c5460; }
+
+        .summary-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .file-list {
+            margin-top: 1rem;
+        }
+
+        .file-list-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .file-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .file-item.success {
+            background: #f8f9fa;
+            border-left: 3px solid #28a745;
+        }
+
+        .file-item.failed {
+            background: #fff3cd;
+            border-left: 3px solid #dc3545;
+        }
+
+        .file-item-icon {
+            font-size: 1.25rem;
+        }
+
+        .file-item-details {
+            flex: 1;
+        }
+
+        .file-item-name {
+            font-weight: 500;
+            color: #212529;
+            margin-bottom: 0.25rem;
+        }
+
+        .file-item-error {
+            font-size: 0.85rem;
+            color: #856404;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .duplicate-warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .duplicate-list {
+            margin-top: 0.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .duplicate-list li {
+            color: #856404;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Bulk Delete Styles */
+        .bulk-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .bulk-actions-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .document-item-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .document-item.selected {
+            background: #e7f3ff;
+            border-left: 4px solid #667eea;
+        }
+
+        .selection-count {
+            font-weight: 600;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const API_URL = 'http://localhost:3001/api';
+
+        // API helper function
+        async function apiCall(endpoint, options = {}) {
+            const token = localStorage.getItem('token');
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(token && { 'Authorization': `Bearer ${token}` })
+            };
+
+            const response = await fetch(`${API_URL}${endpoint}`, {
+                ...options,
+                headers: { ...headers, ...options.headers }
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Request failed');
+            }
+
+            return response.json();
+        }
+
+        // Bulk Upload Confirmation Modal
+        function BulkUploadModal({ uploadResult, onClose }) {
+            if (!uploadResult) return null;
+
+            const { successful, failed, duplicates, summary } = uploadResult;
+            const allSuccess = failed.length === 0 && duplicates.length === 0;
+            const hasDuplicates = duplicates && duplicates.length > 0;
+
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <div className="modal-icon">
+                                {allSuccess ? '✅' : '⚠️'}
+                            </div>
+                            <div className="modal-title">
+                                <h2>
+                                    {allSuccess ? 'Upload Complete!' : 'Upload Completed with Issues'}
+                                </h2>
+                                <p>
+                                    {allSuccess 
+                                        ? `All ${summary.total} documents uploaded successfully`
+                                        : `${summary.successful} of ${summary.total} documents uploaded`
+                                    }
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="modal-body">
+                            <div className="upload-summary">
+                                <div className="summary-card total">
+                                    <div className="summary-number total">{summary.total}</div>
+                                    <div className="summary-label">Total Files</div>
+                                </div>
+                                <div className="summary-card success">
+                                    <div className="summary-number success">{summary.successful}</div>
+                                    <div className="summary-label">Successful</div>
+                                </div>
+                                {(summary.failed > 0 || summary.duplicates > 0) && (
+                                    <div className="summary-card failed">
+                                        <div className="summary-number failed">{summary.failed + summary.duplicates}</div>
+                                        <div className="summary-label">Skipped</div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {successful.length > 0 && (
+                                <div className="file-list">
+                                    <div className="file-list-title">
+                                        <span>✅</span>
+                                        <span>Successfully Uploaded ({successful.length})</span>
+                                    </div>
+                                    {successful.map((file, idx) => (
+                                        <div key={idx} className="file-item success">
+                                            <div className="file-item-icon">📄</div>
+                                            <div className="file-item-details">
+                                                <div className="file-item-name">{file.original_name}</div>
+                                                <div style={{ fontSize: '0.8rem', color: '#6c757d' }}>
+                                                    {(file.file_size / 1024 / 1024).toFixed(2)} MB
+                                                    {file.community_name && (
+                                                        <span style={{ marginLeft: '0.5rem' }}>
+                                                            • 🏘️ {file.community_name}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {hasDuplicates && (
+                                <div className="file-list" style={{ marginTop: '1.5rem' }}>
+                                    <div className="file-list-title">
+                                        <span>⚠️</span>
+                                        <span>Duplicate Files Skipped ({duplicates.length})</span>
+                                    </div>
+                                    {duplicates.map((file, idx) => (
+                                        <div key={idx} className="file-item failed">
+                                            <div className="file-item-icon">📋</div>
+                                            <div className="file-item-details">
+                                                <div className="file-item-name">{file.filename}</div>
+                                                <div className="file-item-error">
+                                                    Already exists in document library
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {failed.length > 0 && (
+                                <div className="file-list" style={{ marginTop: '1.5rem' }}>
+                                    <div className="file-list-title">
+                                        <span>❌</span>
+                                        <span>Failed Uploads ({failed.length})</span>
+                                    </div>
+                                    {failed.map((file, idx) => (
+                                        <div key={idx} className="file-item failed">
+                                            <div className="file-item-icon">⚠️</div>
+                                            <div className="file-item-details">
+                                                <div className="file-item-name">{file.filename}</div>
+                                                <div className="file-item-error">
+                                                    Error: {file.error}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="modal-footer">
+                            <button className="button" onClick={onClose}>
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Duplicate Warning Modal (for single file upload)
+        function DuplicateWarningModal({ filename, onConfirm, onCancel }) {
+            if (!filename) return null;
+
+            return (
+                <div className="modal-overlay" onClick={onCancel}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <div className="modal-icon">⚠️</div>
+                            <div className="modal-title">
+                                <h2>Duplicate Document Detected</h2>
+                                <p>This file already exists in your library</p>
+                            </div>
+                        </div>
+
+                        <div className="modal-body">
+                            <div className="duplicate-warning">
+                                <strong>📋 {filename}</strong>
+                                <p style={{ marginTop: '0.5rem', marginBottom: 0, fontSize: '0.9rem' }}>
+                                    A document with this name already exists. Uploading will replace the existing document.
+                                </p>
+                            </div>
+
+                            <p style={{ color: '#6c757d', fontSize: '0.9rem' }}>
+                                <strong>Options:</strong>
+                            </p>
+                            <ul style={{ color: '#6c757d', fontSize: '0.9rem', marginLeft: '1.5rem' }}>
+                                <li>Cancel and rename your file</li>
+                                <li>Delete the existing document first</li>
+                                <li>Proceed anyway (not recommended)</li>
+                            </ul>
+                        </div>
+
+                        <div className="modal-footer">
+                            <button className="button button-secondary" onClick={onCancel}>
+                                Cancel Upload
+                            </button>
+                            <button className="button button-danger" onClick={onConfirm}>
+                                Upload Anyway
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Edit Community Name Modal
+        function EditCommunityNameModal({ doc, value, onChange, onSave, onCancel }) {
+            if (!doc) return null;
+
+            return (
+                <div className="modal-overlay" onClick={onCancel}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px' }}>
+                        <div className="modal-header">
+                            <div className="modal-icon">✏️</div>
+                            <div className="modal-title">
+                                <h2>Edit Community Name</h2>
+                                <p>Update the community name for this document</p>
+                            </div>
+                        </div>
+
+                        <div className="modal-body">
+                            <div style={{ marginBottom: '1rem' }}>
+                                <div style={{ 
+                                    padding: '1rem', 
+                                    background: '#f8f9fa', 
+                                    borderRadius: '8px',
+                                    marginBottom: '1.5rem'
+                                }}>
+                                    <strong>📄 {doc.original_name}</strong>
+                                    <div style={{ fontSize: '0.85rem', color: '#6c757d', marginTop: '0.5rem' }}>
+                                        {(doc.file_size / 1024 / 1024).toFixed(2)} MB • Uploaded {new Date(doc.uploaded_at).toLocaleDateString()}
+                                    </div>
+                                </div>
+
+                                <label style={{ 
+                                    display: 'block', 
+                                    marginBottom: '0.5rem', 
+                                    fontWeight: '600',
+                                    fontSize: '0.95rem'
+                                }}>
+                                    🏘️ Community Name
+                                </label>
+                                <input
+                                    type="text"
+                                    value={value}
+                                    onChange={(e) => onChange(e.target.value)}
+                                    placeholder="e.g., Sunset Village HOA"
+                                    autoFocus
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter') {
+                                            onSave();
+                                        }
+                                    }}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        border: '2px solid #e9ecef',
+                                        borderRadius: '8px',
+                                        fontSize: '1rem',
+                                        fontFamily: 'inherit'
+                                    }}
+                                />
+                                <div style={{ 
+                                    fontSize: '0.85rem', 
+                                    color: '#6c757d', 
+                                    marginTop: '0.5rem' 
+                                }}>
+                                    Leave empty to clear the community name
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="modal-footer">
+                            <button className="button button-secondary" onClick={onCancel}>
+                                Cancel
+                            </button>
+                            <button className="button" onClick={onSave}>
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Login/Register Component
+        function Login({ onLogin }) {
+            const [isRegister, setIsRegister] = useState(false);
+            const [username, setUsername] = useState('');
+            const [password, setPassword] = useState('');
+            const [confirmPassword, setConfirmPassword] = useState('');
+            const [role, setRole] = useState('resident');
+            const [error, setError] = useState('');
+            const [success, setSuccess] = useState('');
+            const [loading, setLoading] = useState(false);
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                setError('');
+                setSuccess('');
+                setLoading(true);
+
+                // Validation for registration
+                if (isRegister) {
+                    if (username.length < 3) {
+                        setError('Username must be at least 3 characters');
+                        setLoading(false);
+                        return;
+                    }
+                    if (password.length < 6) {
+                        setError('Password must be at least 6 characters');
+                        setLoading(false);
+                        return;
+                    }
+                    if (password !== confirmPassword) {
+                        setError('Passwords do not match');
+                        setLoading(false);
+                        return;
+                    }
+                }
+
+                try {
+                    const endpoint = isRegister ? '/register' : '/login';
+                    const body = isRegister 
+                        ? { username, password, role }
+                        : { username, password };
+
+                    const data = await apiCall(endpoint, {
+                        method: 'POST',
+                        body: JSON.stringify(body)
+                    });
+
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    if (isRegister) {
+                        setSuccess('Account created successfully! Logging you in...');
+                        setTimeout(() => {
+                            onLogin(data.user);
+                        }, 1000);
+                    } else {
+                        onLogin(data.user);
+                    }
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const toggleMode = () => {
+                setIsRegister(!isRegister);
+                setError('');
+                setSuccess('');
+                setUsername('');
+                setPassword('');
+                setConfirmPassword('');
+                setRole('resident');
+            };
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1>🏠 Resident Support AI</h1>
+                        <p>Your HOA Document Assistant</p>
+                    </div>
+                    <div className="card" style={{ maxWidth: '400px', margin: '0 auto' }}>
+                        <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
+                            {isRegister ? 'Create Account' : 'Login'}
+                        </h2>
+                        {error && <div className="alert alert-warning">{error}</div>}
+                        {success && <div className="alert alert-success">{success}</div>}
+                        <form onSubmit={handleSubmit}>
+                            <div className="input-group">
+                                <label>Username</label>
+                                <input
+                                    type="text"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    placeholder={isRegister ? "Choose a username (min 3 characters)" : "Enter username"}
+                                    required
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>Password</label>
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder={isRegister ? "Choose a password (min 6 characters)" : "Enter password"}
+                                    required
+                                />
+                            </div>
+                            {isRegister && (
+                                <>
+                                    <div className="input-group">
+                                        <label>Confirm Password</label>
+                                        <input
+                                            type="password"
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            placeholder="Re-enter your password"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="input-group">
+                                        <label>Account Type</label>
+                                        <select 
+                                            value={role} 
+                                            onChange={(e) => setRole(e.target.value)}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                border: '2px solid #e9ecef',
+                                                borderRadius: '8px',
+                                                fontSize: '1rem',
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            <option value="resident">Resident</option>
+                                            <option value="manager">Manager</option>
+                                        </select>
+                                    </div>
+                                </>
+                            )}
+                            <button type="submit" className="button" style={{ width: '100%' }} disabled={loading}>
+                                {loading ? (isRegister ? 'Creating Account...' : 'Logging in...') : (isRegister ? 'Create Account' : 'Login')}
+                            </button>
+                        </form>
+                        <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+                            <button 
+                                onClick={toggleMode}
+                                style={{
+                                    background: 'none',
+                                    border: 'none',
+                                    color: '#667eea',
+                                    cursor: 'pointer',
+                                    fontSize: '0.9rem',
+                                    textDecoration: 'underline'
+                                }}
+                            >
+                                {isRegister ? 'Already have an account? Login' : "Don't have an account? Register"}
+                            </button>
+                        </div>
+                        {!isRegister && (
+                            <div style={{ marginTop: '1rem', fontSize: '0.875rem', color: '#6c757d', textAlign: 'center' }}>
+                                <p>Default credentials:</p>
+                                <p>Manager: manager / password123</p>
+                                <p>Resident: resident / password123</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        // Manager Dashboard
+        function ManagerDashboard({ user, onLogout }) {
+            const [activeTab, setActiveTab] = useState('upload');
+            const [documents, setDocuments] = useState([]);
+            const [uploading, setUploading] = useState(false);
+            const [uploadProgress, setUploadProgress] = useState(0);
+            const [message, setMessage] = useState('');
+            const [uploadMode, setUploadMode] = useState('single'); // 'single' or 'bulk'
+            const [showModal, setShowModal] = useState(false);
+            const [modalData, setModalData] = useState(null);
+            const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
+            const [duplicateFile, setDuplicateFile] = useState(null);
+            const [pendingFile, setPendingFile] = useState(null);
+            const [selectedDocs, setSelectedDocs] = useState(new Set());
+            const [deleting, setDeleting] = useState(false);
+            const [showEditModal, setShowEditModal] = useState(false);
+            const [editingDoc, setEditingDoc] = useState(null);
+            const [editCommunityName, setEditCommunityName] = useState('');
+            const [inferCommunityName, setInferCommunityName] = useState(true); // Auto-extract by default
+            const [communityName, setCommunityName] = useState('');
+            
+            // Chatbot state
+            const [messages, setMessages] = useState([]);
+            const [inputValue, setInputValue] = useState('');
+            const [loading, setLoading] = useState(false);
+            const messagesEndRef = useRef(null);
+            const chatInputRef = useRef(null);
+            
+            const fileInputRef = useRef(null);
+            const bulkInputRef = useRef(null);
+
+            useEffect(() => {
+                loadDocuments();
+                // Initialize chatbot with welcome message
+                setMessages([
+                    {
+                        role: 'assistant',
+                        content: 'Hello! I\'m your HOA assistant. As a manager, you can ask me questions about community documents, rules, or procedures. I can help you find information quickly!',
+                    }
+                ]);
+            }, []);
+
+            const loadDocuments = async () => {
+                try {
+                    const data = await apiCall('/documents');
+                    setDocuments(data.documents);
+                    setSelectedDocs(new Set()); // Clear selection when reloading
+                } catch (err) {
+                    console.error('Failed to load documents:', err);
+                }
+            };
+
+            const checkForDuplicates = async (filenames) => {
+                try {
+                    const response = await apiCall('/documents/check-duplicates', {
+                        method: 'POST',
+                        body: JSON.stringify({ filenames })
+                    });
+                    return response;
+                } catch (err) {
+                    console.error('Duplicate check error:', err);
+                    return { hasDuplicates: false, duplicates: [] };
+                }
+            };
+
+            const handleFileSelect = async (file) => {
+                if (!file) return;
+
+                // Check for duplicate
+                const duplicateCheck = await checkForDuplicates([file.name]);
+                
+                if (duplicateCheck.hasDuplicates) {
+                    // Show warning modal
+                    setDuplicateFile(file.name);
+                    setPendingFile(file);
+                    setShowDuplicateWarning(true);
+                    if (fileInputRef.current) fileInputRef.current.value = '';
+                    return;
+                }
+
+                // No duplicate, proceed with upload
+                await uploadSingleFile(file);
+            };
+
+            const uploadSingleFile = async (file) => {
+                setUploading(true);
+                setUploadProgress(0);
+                setMessage('');
+
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                // If not inferring, send skip_extraction flag and manual name if provided
+                if (!inferCommunityName) {
+                    formData.append('skip_extraction', 'true');
+                    if (communityName.trim()) {
+                        formData.append('community_name', communityName.trim());
+                    }
+                }
+
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch(`${API_URL}/documents/upload`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (!response.ok) {
+                        if (result.isDuplicate) {
+                            setMessage(`⚠️ ${result.message}`);
+                        } else {
+                            throw new Error(result.error);
+                        }
+                    } else {
+                        setMessage('✅ Document uploaded successfully!');
+                        setUploadProgress(100);
+                        loadDocuments();
+                        setCommunityName(''); // Clear manual input
+                    }
+                    
+                    if (fileInputRef.current) fileInputRef.current.value = '';
+                } catch (err) {
+                    setMessage(`Error: ${err.message}`);
+                } finally {
+                    setUploading(false);
+                    setTimeout(() => setMessage(''), 5000);
+                }
+            };
+
+            const handleDuplicateConfirm = async () => {
+                setShowDuplicateWarning(false);
+                if (pendingFile) {
+                    await uploadSingleFile(pendingFile);
+                    setPendingFile(null);
+                    setDuplicateFile(null);
+                }
+            };
+
+            const handleDuplicateCancel = () => {
+                setShowDuplicateWarning(false);
+                setPendingFile(null);
+                setDuplicateFile(null);
+                setMessage('Upload cancelled - duplicate file detected');
+                setTimeout(() => setMessage(''), 3000);
+            };
+
+            const handleBulkUpload = async (files) => {
+                if (!files || files.length === 0) return;
+
+                if (files.length > 10) {
+                    setMessage('Error: Maximum 10 files allowed per upload');
+                    return;
+                }
+
+                setUploading(true);
+                setUploadProgress(0);
+                setMessage('');
+
+                const formData = new FormData();
+                for (let i = 0; i < files.length; i++) {
+                    formData.append('files', files[i]);
+                }
+                
+                // If not inferring, send skip_extraction flag and manual name if provided
+                if (!inferCommunityName) {
+                    formData.append('skip_extraction', 'true');
+                    if (communityName.trim()) {
+                        formData.append('community_name', communityName.trim());
+                    }
+                }
+
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch(`${API_URL}/documents/bulk-upload`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.error);
+                    }
+
+                    const result = await response.json();
+                    
+                    setUploadProgress(100);
+                    loadDocuments();
+                    setCommunityName(''); // Clear manual input
+                    if (bulkInputRef.current) bulkInputRef.current.value = '';
+                    
+                    // Show confirmation modal
+                    setModalData(result);
+                    setShowModal(true);
+                } catch (err) {
+                    setMessage(`Error: ${err.message}`);
+                } finally {
+                    setUploading(false);
+                }
+            };
+
+            const closeModal = () => {
+                setShowModal(false);
+                setModalData(null);
+            };
+
+            const handleDelete = async (docId) => {
+                if (!confirm('Are you sure you want to delete this document?')) return;
+
+                try {
+                    await apiCall(`/documents/${docId}`, { method: 'DELETE' });
+                    setMessage('Document deleted successfully');
+                    loadDocuments();
+                } catch (err) {
+                    setMessage(`Error: ${err.message}`);
+                }
+            };
+
+            // Bulk delete functions
+            const toggleDocSelection = (docId) => {
+                const newSelected = new Set(selectedDocs);
+                if (newSelected.has(docId)) {
+                    newSelected.delete(docId);
+                } else {
+                    newSelected.add(docId);
+                }
+                setSelectedDocs(newSelected);
+            };
+
+            const toggleSelectAll = () => {
+                if (selectedDocs.size === documents.length) {
+                    setSelectedDocs(new Set());
+                } else {
+                    setSelectedDocs(new Set(documents.map(doc => doc.id)));
+                }
+            };
+
+            const handleBulkDelete = async () => {
+                if (selectedDocs.size === 0) return;
+
+                const count = selectedDocs.size;
+                const docWord = count === 1 ? 'document' : 'documents';
+                
+                if (!confirm(`Are you sure you want to delete ${count} ${docWord}? This action cannot be undone.`)) {
+                    return;
+                }
+
+                setDeleting(true);
+                setMessage('');
+
+                let successCount = 0;
+                let failCount = 0;
+
+                for (const docId of selectedDocs) {
+                    try {
+                        await apiCall(`/documents/${docId}`, { method: 'DELETE' });
+                        successCount++;
+                    } catch (err) {
+                        console.error(`Failed to delete document ${docId}:`, err);
+                        failCount++;
+                    }
+                }
+
+                setDeleting(false);
+                
+                if (failCount === 0) {
+                    setMessage(`✅ Successfully deleted ${successCount} ${docWord}`);
+                } else {
+                    setMessage(`⚠️ Deleted ${successCount} ${docWord}, ${failCount} failed`);
+                }
+
+                loadDocuments();
+                setTimeout(() => setMessage(''), 5000);
+            };
+
+            const clearSelection = () => {
+                setSelectedDocs(new Set());
+            };
+
+            // Edit community name functions
+            const handleEditCommunityName = (doc) => {
+                setEditingDoc(doc);
+                setEditCommunityName(doc.community_name || '');
+                setShowEditModal(true);
+            };
+
+            const handleSaveEditCommunityName = async () => {
+                if (!editingDoc) return;
+
+                try {
+                    await apiCall(`/documents/${editingDoc.id}/community-name`, {
+                        method: 'PATCH',
+                        body: JSON.stringify({ 
+                            community_name: editCommunityName.trim() || null 
+                        })
+                    });
+
+                    setMessage('✅ Community name updated successfully!');
+                    setShowEditModal(false);
+                    setEditingDoc(null);
+                    setEditCommunityName('');
+                    loadDocuments();
+                    setTimeout(() => setMessage(''), 3000);
+                } catch (err) {
+                    setMessage(`Error: ${err.message}`);
+                    setTimeout(() => setMessage(''), 3000);
+                }
+            };
+
+            const handleCancelEdit = () => {
+                setShowEditModal(false);
+                setEditingDoc(null);
+                setEditCommunityName('');
+            };
+
+            // Chatbot functions
+            const scrollToBottom = () => {
+                messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            };
+
+            useEffect(() => {
+                scrollToBottom();
+            }, [messages]);
+
+            const handleSendMessage = async () => {
+                if (!inputValue.trim() || loading) return;
+
+                const userMessage = inputValue.trim();
+                setInputValue('');
+                setLoading(true);
+
+                // Add user message
+                setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+
+                try {
+                    const response = await apiCall('/chat', {
+                        method: 'POST',
+                        body: JSON.stringify({ question: userMessage })
+                    });
+
+                    // Add assistant response
+                    setMessages(prev => [...prev, { 
+                        role: 'assistant', 
+                        content: response.answer,
+                        documentsReferenced: response.documentsReferenced
+                    }]);
+                } catch (err) {
+                    setMessages(prev => [...prev, {
+                        role: 'assistant',
+                        content: `Sorry, I encountered an error: ${err.message}`
+                    }]);
+                }
+
+                setLoading(false);
+                
+                // Auto-focus input for next question
+                setTimeout(() => {
+                    chatInputRef.current?.focus();
+                }, 100);
+            };
+
+            const handleKeyPress = (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSendMessage();
+                }
+            };
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1>🏠 Manager Portal</h1>
+                        <p>Document Management & Upload</p>
+                    </div>
+
+                    <div className="user-info">
+                        <div>
+                            <strong>Logged in as:</strong> {user.username} ({user.role})
+                        </div>
+                        <button onClick={onLogout} className="logout-btn">Logout</button>
+                    </div>
+
+                    <div className="card">
+                        <div className="tabs">
+                            <button className={`tab ${activeTab === 'upload' ? 'active' : ''}`} onClick={() => setActiveTab('upload')}>
+                                Upload Documents
+                            </button>
+                            <button className={`tab ${activeTab === 'manage' ? 'active' : ''}`} onClick={() => setActiveTab('manage')}>
+                                Manage Documents ({documents.length})
+                            </button>
+                            <button className={`tab ${activeTab === 'chat' ? 'active' : ''}`} onClick={() => setActiveTab('chat')}>
+                                💬 Ask Assistant
+                            </button>
+                        </div>
+
+                        {message && (
+                            <div className={`alert ${message.includes('Error') || message.includes('❌') ? 'alert-warning' : 'alert-success'}`} style={{ whiteSpace: 'pre-line' }}>
+                                {message}
+                            </div>
+                        )}
+
+                        {activeTab === 'upload' && (
+                            <div>
+                                {/* Upload Mode Toggle */}
+                                <div style={{ marginBottom: '1.5rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                                    <button
+                                        className={`button ${uploadMode === 'single' ? '' : 'button-secondary'}`}
+                                        onClick={() => setUploadMode('single')}
+                                        style={{ minWidth: '150px' }}
+                                    >
+                                        📄 Single Upload
+                                    </button>
+                                    <button
+                                        className={`button ${uploadMode === 'bulk' ? '' : 'button-secondary'}`}
+                                        onClick={() => setUploadMode('bulk')}
+                                        style={{ minWidth: '150px' }}
+                                    >
+                                        📦 Bulk Upload (up to 10)
+                                    </button>
+                                </div>
+
+                                {/* Single Upload */}
+                                {uploadMode === 'single' && (
+                                    <div className="file-upload">
+                                        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📄</div>
+                                        <h3 style={{ marginBottom: '1rem' }}>Upload Single Document</h3>
+                                        <p style={{ color: '#6c757d', marginBottom: '1.5rem' }}>
+                                            Supported formats: PDF, Word (up to 50MB)
+                                        </p>
+                                        
+                                        {/* Community Name Options */}
+                                        <div style={{ marginBottom: '1.5rem', maxWidth: '450px', margin: '0 auto 1.5rem' }}>
+                                            <label style={{ 
+                                                display: 'flex', 
+                                                alignItems: 'center', 
+                                                justifyContent: 'center',
+                                                marginBottom: '1rem',
+                                                cursor: 'pointer',
+                                                fontSize: '0.95rem'
+                                            }}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={inferCommunityName}
+                                                    onChange={(e) => setInferCommunityName(e.target.checked)}
+                                                    disabled={uploading}
+                                                    style={{ marginRight: '0.5rem' }}
+                                                />
+                                                <span>🤖 Infer community name from document</span>
+                                            </label>
+                                            
+                                            {!inferCommunityName && (
+                                                <div>
+                                                    <label style={{ 
+                                                        display: 'block', 
+                                                        marginBottom: '0.5rem', 
+                                                        fontWeight: '600',
+                                                        textAlign: 'left'
+                                                    }}>
+                                                        🏘️ Community Name
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        value={communityName}
+                                                        onChange={(e) => setCommunityName(e.target.value)}
+                                                        placeholder="Enter a Community Name"
+                                                        disabled={uploading}
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '0.75rem',
+                                                            border: '2px solid #e9ecef',
+                                                            borderRadius: '8px',
+                                                            fontSize: '1rem',
+                                                            fontFamily: 'inherit'
+                                                        }}
+                                                    />
+                                                    <div style={{ 
+                                                        fontSize: '0.85rem', 
+                                                        color: '#6c757d', 
+                                                        marginTop: '0.5rem',
+                                                        textAlign: 'left'
+                                                    }}>
+                                                        Manually enter the community name for this document
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                        
+                                        <input
+                                            ref={fileInputRef}
+                                            type="file"
+                                            accept=".pdf,.doc,.docx"
+                                            onChange={(e) => handleFileSelect(e.target.files[0])}
+                                            style={{ display: 'none' }}
+                                            disabled={uploading}
+                                        />
+                                        <button
+                                            className="button"
+                                            onClick={() => fileInputRef.current.click()}
+                                            disabled={uploading}
+                                        >
+                                            {uploading ? 'Uploading...' : 'Select File'}
+                                        </button>
+                                    </div>
+                                )}
+
+                                {/* Bulk Upload */}
+                                {uploadMode === 'bulk' && (
+                                    <div className="file-upload">
+                                        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📦</div>
+                                        <h3 style={{ marginBottom: '1rem' }}>Bulk Upload Documents</h3>
+                                        <p style={{ color: '#6c757d', marginBottom: '0.5rem' }}>
+                                            Upload up to <strong>10 documents</strong> at once
+                                        </p>
+                                        <p style={{ color: '#6c757d', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+                                            Supported formats: PDF, Word (50MB each)
+                                        </p>
+                                        
+                                        {/* Community Name Options */}
+                                        <div style={{ marginBottom: '1.5rem', maxWidth: '450px', margin: '0 auto 1.5rem' }}>
+                                            <label style={{ 
+                                                display: 'flex', 
+                                                alignItems: 'center', 
+                                                justifyContent: 'center',
+                                                marginBottom: '1rem',
+                                                cursor: 'pointer',
+                                                fontSize: '0.95rem'
+                                            }}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={inferCommunityName}
+                                                    onChange={(e) => setInferCommunityName(e.target.checked)}
+                                                    disabled={uploading}
+                                                    style={{ marginRight: '0.5rem' }}
+                                                />
+                                                <span>🤖 Infer community names from documents</span>
+                                            </label>
+                                            
+                                            {!inferCommunityName && (
+                                                <div>
+                                                    <label style={{ 
+                                                        display: 'block', 
+                                                        marginBottom: '0.5rem', 
+                                                        fontWeight: '600',
+                                                        textAlign: 'left'
+                                                    }}>
+                                                        🏘️ Community Name
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        value={communityName}
+                                                        onChange={(e) => setCommunityName(e.target.value)}
+                                                        placeholder="Enter a Community Name"
+                                                        disabled={uploading}
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '0.75rem',
+                                                            border: '2px solid #e9ecef',
+                                                            borderRadius: '8px',
+                                                            fontSize: '1rem',
+                                                            fontFamily: 'inherit'
+                                                        }}
+                                                    />
+                                                    <div style={{ 
+                                                        fontSize: '0.85rem', 
+                                                        color: '#6c757d', 
+                                                        marginTop: '0.5rem',
+                                                        textAlign: 'left'
+                                                    }}>
+                                                        This name will be applied to all uploaded documents
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                        
+                                        <input
+                                            ref={bulkInputRef}
+                                            type="file"
+                                            accept=".pdf,.doc,.docx"
+                                            multiple
+                                            onChange={(e) => handleBulkUpload(e.target.files)}
+                                            style={{ display: 'none' }}
+                                            disabled={uploading}
+                                        />
+                                        <button
+                                            className="button"
+                                            onClick={() => bulkInputRef.current.click()}
+                                            disabled={uploading}
+                                        >
+                                            {uploading ? 'Processing Files...' : 'Select Multiple Files'}
+                                        </button>
+                                        <div style={{ marginTop: '1rem', fontSize: '0.85rem', color: '#6c757d' }}>
+                                            💡 Tip: Hold Ctrl (Windows) or Cmd (Mac) to select multiple files
+                                        </div>
+                                    </div>
+                                )}
+
+                                {uploading && (
+                                    <div className="progress-bar">
+                                        <div className="progress-fill" style={{ width: `${uploadProgress}%` }}></div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {activeTab === 'manage' && (
+                            <div>
+                                {documents.length === 0 ? (
+                                    <div className="alert alert-info">
+                                        No documents uploaded yet. Upload your first document to get started!
+                                    </div>
+                                ) : (
+                                    <>
+                                        {/* Bulk Actions Bar */}
+                                        <div className="bulk-actions">
+                                            <div className="bulk-actions-left">
+                                                <label className="checkbox-label">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="checkbox"
+                                                        checked={selectedDocs.size === documents.length && documents.length > 0}
+                                                        onChange={toggleSelectAll}
+                                                    />
+                                                    <span>Select All</span>
+                                                </label>
+                                                {selectedDocs.size > 0 && (
+                                                    <span className="selection-count">
+                                                        {selectedDocs.size} selected
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div>
+                                                {selectedDocs.size > 0 && (
+                                                    <>
+                                                        <button
+                                                            className="button button-secondary"
+                                                            onClick={clearSelection}
+                                                            style={{ marginRight: '0.5rem' }}
+                                                        >
+                                                            Clear Selection
+                                                        </button>
+                                                        <button
+                                                            className="button button-danger"
+                                                            onClick={handleBulkDelete}
+                                                            disabled={deleting}
+                                                        >
+                                                            {deleting ? 'Deleting...' : `Delete ${selectedDocs.size} Document${selectedDocs.size > 1 ? 's' : ''}`}
+                                                        </button>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Document List */}
+                                        <div className="document-list">
+                                            {documents.map(doc => (
+                                                <div 
+                                                    key={doc.id} 
+                                                    className={`document-item ${selectedDocs.has(doc.id) ? 'selected' : ''}`}
+                                                >
+                                                    <div className="document-item-checkbox">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="checkbox"
+                                                            checked={selectedDocs.has(doc.id)}
+                                                            onChange={() => toggleDocSelection(doc.id)}
+                                                        />
+                                                        <div className="document-info">
+                                                            <div className="document-name">
+                                                                📄 {doc.original_name}
+                                                                {doc.community_name && (
+                                                                    <span style={{ 
+                                                                        marginLeft: '0.75rem', 
+                                                                        padding: '0.25rem 0.5rem',
+                                                                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                                        color: 'white',
+                                                                        borderRadius: '4px',
+                                                                        fontSize: '0.8rem',
+                                                                        fontWeight: 'normal'
+                                                                    }}>
+                                                                        🏘️ {doc.community_name}
+                                                                    </span>
+                                                                )}
+                                                                <button
+                                                                    onClick={() => handleEditCommunityName(doc)}
+                                                                    style={{
+                                                                        marginLeft: '0.5rem',
+                                                                        padding: '0.25rem 0.5rem',
+                                                                        background: 'transparent',
+                                                                        border: '1px solid #dee2e6',
+                                                                        borderRadius: '4px',
+                                                                        fontSize: '0.75rem',
+                                                                        cursor: 'pointer',
+                                                                        color: '#6c757d',
+                                                                        transition: 'all 0.2s'
+                                                                    }}
+                                                                    onMouseEnter={(e) => {
+                                                                        e.target.style.background = '#f8f9fa';
+                                                                        e.target.style.borderColor = '#adb5bd';
+                                                                    }}
+                                                                    onMouseLeave={(e) => {
+                                                                        e.target.style.background = 'transparent';
+                                                                        e.target.style.borderColor = '#dee2e6';
+                                                                    }}
+                                                                    title={doc.community_name ? 'Edit community name' : 'Add community name'}
+                                                                >
+                                                                    ✏️ {doc.community_name ? 'Edit' : 'Add'}
+                                                                </button>
+                                                            </div>
+                                                            <div className="document-meta">
+                                                                {(doc.file_size / 1024 / 1024).toFixed(2)} MB • Uploaded {new Date(doc.uploaded_at).toLocaleDateString()}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        className="button button-danger"
+                                                        onClick={() => handleDelete(doc.id)}
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        )}
+
+                        {activeTab === 'chat' && (
+                            <div>
+                                <div style={{ marginBottom: '1rem', padding: '1rem', background: '#f8f9fa', borderRadius: '8px' }}>
+                                    <strong>💬 AI Assistant</strong>
+                                    <p style={{ margin: '0.5rem 0 0 0', color: '#6c757d', fontSize: '0.9rem' }}>
+                                        Ask questions about your HOA documents. I can help you find specific information, explain rules, or provide summaries.
+                                    </p>
+                                </div>
+
+                                <div className="chat-container">
+                                    <div className="messages">
+                                        {messages.map((msg, idx) => (
+                                            <div key={idx} className={`message ${msg.role}`}>
+                                                <div className="message-content">
+                                                    {msg.content}
+                                                </div>
+                                                {msg.documentsReferenced && msg.documentsReferenced.length > 0 && (
+                                                    <div style={{ marginTop: '0.5rem', fontSize: '0.875rem', opacity: 0.8 }}>
+                                                        📚 Referenced: {msg.documentsReferenced.map(d => d.name).join(', ')}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+                                        {loading && (
+                                            <div className="message assistant">
+                                                <div className="message-content">
+                                                    <div className="typing-indicator">
+                                                        <span></span>
+                                                        <span></span>
+                                                        <span></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                        <div ref={messagesEndRef} />
+                                    </div>
+                                    <div className="input-container">
+                                        <input
+                                            ref={chatInputRef}
+                                            type="text"
+                                            value={inputValue}
+                                            onChange={(e) => setInputValue(e.target.value)}
+                                            onKeyPress={handleKeyPress}
+                                            placeholder="Ask a question about your HOA documents..."
+                                            disabled={loading}
+                                            className="chat-input"
+                                        />
+                                        <button
+                                            onClick={handleSendMessage}
+                                            disabled={loading || !inputValue.trim()}
+                                            className="button"
+                                        >
+                                            Send
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Bulk Upload Confirmation Modal */}
+                    {showModal && <BulkUploadModal uploadResult={modalData} onClose={closeModal} />}
+                    
+                    {/* Edit Community Name Modal */}
+                    {showEditModal && (
+                        <EditCommunityNameModal
+                            doc={editingDoc}
+                            value={editCommunityName}
+                            onChange={setEditCommunityName}
+                            onSave={handleSaveEditCommunityName}
+                            onCancel={handleCancelEdit}
+                        />
+                    )}
+                    
+                    {/* Duplicate Warning Modal */}
+                    {showDuplicateWarning && (
+                        <DuplicateWarningModal 
+                            filename={duplicateFile} 
+                            onConfirm={handleDuplicateConfirm}
+                            onCancel={handleDuplicateCancel}
+                        />
+                    )}
+                </div>
+            );
+        }
+
+        // Resident Dashboard
+        function ResidentDashboard({ user, onLogout }) {
+            const [documents, setDocuments] = useState([]);
+            const [messages, setMessages] = useState([]);
+            const [inputValue, setInputValue] = useState('');
+            const [loading, setLoading] = useState(false);
+            const messagesEndRef = useRef(null);
+            const chatInputRef = useRef(null);
+
+            useEffect(() => {
+                loadDocuments();
+                setMessages([
+                    {
+                        role: 'assistant',
+                        content: 'Hello! I\'m your HOA assistant. Ask me anything about your community documents, rules, regulations, or procedures.',
+                    }
+                ]);
+            }, []);
+
+            const loadDocuments = async () => {
+                try {
+                    const data = await apiCall('/documents');
+                    setDocuments(data.documents);
+                } catch (err) {
+                    console.error('Failed to load documents:', err);
+                }
+            };
+
+            const scrollToBottom = () => {
+                messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            };
+
+            useEffect(scrollToBottom, [messages]);
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                if (!inputValue.trim() || loading) return;
+
+                const userMessage = { role: 'user', content: inputValue.trim() };
+                setMessages(prev => [...prev, userMessage]);
+                setInputValue('');
+                setLoading(true);
+
+                try {
+                    const response = await apiCall('/chat', {
+                        method: 'POST',
+                        body: JSON.stringify({ question: inputValue.trim() })
+                    });
+
+                    const assistantMessage = {
+                        role: 'assistant',
+                        content: response.answer,
+                        documentsReferenced: response.documentsReferenced
+                    };
+
+                    setMessages(prev => [...prev, assistantMessage]);
+                } catch (err) {
+                    const errorMessage = {
+                        role: 'assistant',
+                        content: `Sorry, I encountered an error: ${err.message}`,
+                        error: true
+                    };
+                    setMessages(prev => [...prev, errorMessage]);
+                } finally {
+                    setLoading(false);
+                    
+                    // Auto-focus input for next question
+                    setTimeout(() => {
+                        chatInputRef.current?.focus();
+                    }, 100);
+                }
+            };
+
+            const suggestedQuestions = [
+                "What are the pool hours?",
+                "What are the parking rules?",
+                "How do I contact the HOA board?",
+                "What are the pet policies?"
+            ];
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1>🏠 Resident Support AI</h1>
+                        <p>Ask questions about your HOA documents</p>
+                    </div>
+
+                    <div className="user-info">
+                        <div>
+                            <strong>Logged in as:</strong> {user.username} ({user.role})
+                        </div>
+                        <button onClick={onLogout} className="logout-btn">Logout</button>
+                    </div>
+
+                    <div className="card">
+                        <h3 style={{ marginBottom: '1rem' }}>💬 Chat with AI Assistant</h3>
+                        
+                        {documents.length === 0 && (
+                            <div className="alert alert-warning" style={{ marginBottom: '1rem' }}>
+                                No documents available yet. Your HOA manager needs to upload documents first.
+                            </div>
+                        )}
+
+                        <div className="chat-container">
+                            <div className="messages">
+                                {messages.map((msg, idx) => (
+                                    <div key={idx} className={`message ${msg.role} ${msg.error ? 'error' : ''}`}>
+                                        {msg.content}
+                                        {msg.documentsReferenced && msg.documentsReferenced.length > 0 && (
+                                            <div style={{ marginTop: '0.5rem', fontSize: '0.875rem', opacity: 0.8 }}>
+                                                📚 Referenced: {msg.documentsReferenced.map(d => d.name).join(', ')}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                                {loading && (
+                                    <div className="message assistant">
+                                        <em>Thinking...</em>
+                                    </div>
+                                )}
+                                <div ref={messagesEndRef} />
+                            </div>
+
+                            <form onSubmit={handleSubmit} className="chat-input-container">
+                                <input
+                                    ref={chatInputRef}
+                                    type="text"
+                                    className="chat-input"
+                                    value={inputValue}
+                                    onChange={(e) => setInputValue(e.target.value)}
+                                    placeholder="Ask a question about your HOA..."
+                                    disabled={loading}
+                                />
+                                <button type="submit" className="button" disabled={loading || !inputValue.trim()}>
+                                    Send
+                                </button>
+                            </form>
+                        </div>
+
+                        {messages.length === 1 && (
+                            <div style={{ marginTop: '1rem' }}>
+                                <p style={{ marginBottom: '0.5rem', color: '#6c757d', fontWeight: 500 }}>
+                                    Try asking:
+                                </p>
+                                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                    {suggestedQuestions.map((q, idx) => (
+                                        <button
+                                            key={idx}
+                                            className="button button-secondary"
+                                            onClick={() => setInputValue(q)}
+                                            style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}
+                                        >
+                                            {q}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="card">
+                        <h3 style={{ marginBottom: '1rem' }}>📚 Available Documents</h3>
+                        {documents.length === 0 ? (
+                            <div className="alert alert-info">
+                                No documents available yet.
+                            </div>
+                        ) : (
+                            <div className="document-list">
+                                {documents.map(doc => (
+                                    <div key={doc.id} className="document-item">
+                                        <div className="document-info">
+                                            <div className="document-name">📄 {doc.original_name}</div>
+                                            <div className="document-meta">
+                                                Uploaded {new Date(doc.uploaded_at).toLocaleDateString()}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        // Main App Component
+        function App() {
+            const [user, setUser] = useState(null);
+
+            useEffect(() => {
+                const savedUser = localStorage.getItem('user');
+                if (savedUser) {
+                    setUser(JSON.parse(savedUser));
+                }
+            }, []);
+
+            const handleLogin = (userData) => {
+                setUser(userData);
+            };
+
+            const handleLogout = () => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                setUser(null);
+            };
+
+            if (!user) {
+                return <Login onLogin={handleLogin} />;
+            }
+
+            if (user.role === 'manager') {
+                return <ManagerDashboard user={user} onLogout={handleLogout} />;
+            }
+
+            return <ResidentDashboard user={user} onLogout={handleLogout} />;
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>

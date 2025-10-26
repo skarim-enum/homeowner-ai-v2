@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "username": "manager",
+    "password": "$2a$10$lz5RQSmLbhobO2pFUmCk.e6DJlKORcU5Hmt1kSWP3oqX0UGYDy28K",
+    "role": "manager",
+    "created_at": "2025-10-26T12:23:11.735Z"
+  },
+  {
+    "id": 2,
+    "username": "resident",
+    "password": "$2a$10$lz5RQSmLbhobO2pFUmCk.e6DJlKORcU5Hmt1kSWP3oqX0UGYDy28K",
+    "role": "resident",
+    "created_at": "2025-10-26T12:23:11.735Z"
+  },
+  {
+    "id": 3,
+    "username": "skarim",
+    "password": "$2a$10$TCek0jS1hmYnyudX.B6j5OpH4pmJ81wUSeO354YKytnsE5wMa5bhG",
+    "role": "manager",
+    "created_at": "2025-10-26T12:54:26.219Z"
+  },
+  {
+    "id": 4,
+    "username": "guest",
+    "password": "$2a$10$OBcU04QjuU13nGVNBFRDzuu2iOG/dpxe4wfECRPWPK7YzAHwxaHnu",
+    "role": "manager",
+    "created_at": "2025-10-26T16:45:09.647Z"
+  }
+]

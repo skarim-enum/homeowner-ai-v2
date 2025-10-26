@@ -1,0 +1,620 @@
+[
+  {
+    "id": 1,
+    "user_id": 2,
+    "question": "what is the due date",
+    "answer": "I'm sorry, but the due date information is not provided in the documents. If you have any other questions or need assistance with something else, feel free to ask!",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Springmont Governing Documents.pdf\"}]",
+    "created_at": "2025-10-26T12:41:08.017Z"
+  },
+  {
+    "id": 2,
+    "user_id": 2,
+    "question": "What is the name of the condo association",
+    "answer": "The name of the condo association is SPRINGMONT OWNERS ASSOCIATION, INC.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Springmont Governing Documents.pdf\"}]",
+    "created_at": "2025-10-26T12:41:19.833Z"
+  },
+  {
+    "id": 3,
+    "user_id": 2,
+    "question": "What is the HOA fee",
+    "answer": "I'm sorry, but the specific HOA fee amount is not provided in the HOA documents you shared. For details regarding the HOA fee, I recommend reaching out to the HOA directly for accurate information. Let me know if you need help with anything else!",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Springmont Governing Documents.pdf\"}]",
+    "created_at": "2025-10-26T12:41:27.036Z"
+  },
+  {
+    "id": 4,
+    "user_id": 2,
+    "question": "For stonebriar village, what is the late fee",
+    "answer": "I'm sorry, but the HOA documents for Stonebriar Village do not specify the late fee amount. I recommend reaching out to the Stonebriar Village Homeowners Association at (469) 480-8000 for more information on the late fee policy.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Springmont Governing Documents.pdf\"},{\"id\":2,\"name\":\"Stonebriar Village Gov_Docs.pdf\"}]",
+    "created_at": "2025-10-26T12:45:18.743Z"
+  },
+  {
+    "id": 5,
+    "user_id": 2,
+    "question": "Do any of the documents contain late fees",
+    "answer": "None of the provided HOA documents contain information about late fees. If you have any other questions or need further assistance, feel free to ask!",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Springmont Governing Documents.pdf\"},{\"id\":2,\"name\":\"Stonebriar Village Gov_Docs.pdf\"},{\"id\":3,\"name\":\"Boardwalk on the Parkway Condos Gov Docs.pdf\"},{\"id\":4,\"name\":\"Policy document_09_01_2025 (2).pdf\"},{\"id\":5,\"name\":\"96G Policy document_09_01_2025.pdf\"},{\"id\":6,\"name\":\"Policy document_09_01_2025 (1).pdf\"}]",
+    "created_at": "2025-10-26T13:05:38.302Z"
+  },
+  {
+    "id": 6,
+    "user_id": 2,
+    "question": "What is the pet policy",
+    "answer": "I'm sorry, but the provided HOA documents do not contain information about a pet policy. If you have any other questions or need assistance with something else, feel free to ask!",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Springmont Governing Documents.pdf\"},{\"id\":2,\"name\":\"Stonebriar Village Gov_Docs.pdf\"},{\"id\":3,\"name\":\"Boardwalk on the Parkway Condos Gov Docs.pdf\"},{\"id\":4,\"name\":\"Policy document_09_01_2025 (2).pdf\"},{\"id\":5,\"name\":\"96G Policy document_09_01_2025.pdf\"},{\"id\":6,\"name\":\"Policy document_09_01_2025 (1).pdf\"}]",
+    "created_at": "2025-10-26T13:05:58.731Z"
+  },
+  {
+    "id": 7,
+    "user_id": 2,
+    "question": "For Pinecrest what is the late fee",
+    "answer": "I'm sorry, but the provided documents do not contain information about a property named \"Pinecrest\" or its associated late fee. It's recommended to refer to the specific HOA documents or contact the HOA management for details regarding late fees for Pinecrest.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Springmont Governing Documents.pdf\"},{\"id\":2,\"name\":\"Stonebriar Village Gov_Docs.pdf\"},{\"id\":3,\"name\":\"Boardwalk on the Parkway Condos Gov Docs.pdf\"},{\"id\":4,\"name\":\"Policy document_09_01_2025 (2).pdf\"},{\"id\":5,\"name\":\"96G Policy document_09_01_2025.pdf\"},{\"id\":6,\"name\":\"Policy document_09_01_2025 (1).pdf\"},{\"id\":7,\"name\":\"Boardwalk on the Parkway Condos Gov Docs.pdf\"},{\"id\":8,\"name\":\"Springmont Governing Documents.pdf\"},{\"id\":9,\"name\":\"Stonebriar Village Gov_Docs.pdf\"},{\"id\":10,\"name\":\"25-08-31 Oceanside Plaza Condo FS.pdf\"},{\"id\":11,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T13:22:18.754Z"
+  },
+  {
+    "id": 8,
+    "user_id": 2,
+    "question": "Summarize the rules for Pinecrest",
+    "answer": "I'm sorry, but the provided documents do not contain information about Pinecrest. If you have specific questions or details related to Pinecrest, please provide them for further assistance.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Springmont Governing Documents.pdf\"},{\"id\":2,\"name\":\"Stonebriar Village Gov_Docs.pdf\"},{\"id\":3,\"name\":\"Boardwalk on the Parkway Condos Gov Docs.pdf\"},{\"id\":4,\"name\":\"Policy document_09_01_2025 (2).pdf\"},{\"id\":5,\"name\":\"96G Policy document_09_01_2025.pdf\"},{\"id\":6,\"name\":\"Policy document_09_01_2025 (1).pdf\"},{\"id\":7,\"name\":\"Boardwalk on the Parkway Condos Gov Docs.pdf\"},{\"id\":8,\"name\":\"Springmont Governing Documents.pdf\"},{\"id\":9,\"name\":\"Stonebriar Village Gov_Docs.pdf\"},{\"id\":10,\"name\":\"25-08-31 Oceanside Plaza Condo FS.pdf\"},{\"id\":11,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T13:22:48.253Z"
+  },
+  {
+    "id": 9,
+    "user_id": 2,
+    "question": "What is the late fee",
+    "answer": "The late fee for overdue payments in the Pinecrest Meadows Homeowners Association is $35.00.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T13:38:00.795Z"
+  },
+  {
+    "id": 10,
+    "user_id": 2,
+    "question": "What is the due date",
+    "answer": "The due date for the annual assessments (HOA Dues) in Pinecrest Meadows subdivision is on the 1st of January, April, July, and October.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T13:38:37.995Z"
+  },
+  {
+    "id": 11,
+    "user_id": 2,
+    "question": "What other restrictions are there",
+    "answer": "The other restrictions in the provided HOA documents include:\n- Restrictions on exterior modifications without ARC approval (e.g., fencing, colors, satellite dishes)\n- Lawn maintenance standards and seasonal requirements\n- Restrictions on parking (e.g., boats, RVs, trailers, commercial vehicles)\n- Regulations on pets, noise, trash/recycling, and leasing/rentals\n\nIf you have any specific questions about these restrictions or need more details, feel free to ask!",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T13:38:53.786Z"
+  },
+  {
+    "id": 12,
+    "user_id": 2,
+    "question": "How do I submit an ARC approval",
+    "answer": "To submit an Architectural Review Committee (ARC) approval, you must first complete a written application including plans, dimensions, materials, colors, proposed contractors, and timelines. Once your application is ready, you can submit it to the ARC for review. The ARC will then approve or deny your application within 30 days.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T13:39:09.120Z"
+  },
+  {
+    "id": 13,
+    "user_id": 2,
+    "question": "what is the late fee",
+    "answer": "The late fee for HOA Dues in the Pinecrest Meadows subdivision is $35.00.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:01:13.825Z"
+  },
+  {
+    "id": 14,
+    "user_id": 2,
+    "question": "How do I file an ARC request",
+    "answer": "To file an Architectural Review Committee (ARC) request for exterior modifications, you must submit a written application to the ARC. Include plans, dimensions, materials, colors, proposed contractors, and timelines. The ARC will approve or deny your request within 30 days.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:01:28.197Z"
+  },
+  {
+    "id": 15,
+    "user_id": 2,
+    "question": "What is the name of the HOA",
+    "answer": "The name of the HOA is Pinecrest Meadows Homeowners Association.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:06:31.184Z"
+  },
+  {
+    "id": 16,
+    "user_id": 2,
+    "question": "What are the late fees",
+    "answer": "The late fee for overdue payments in the Pinecrest Meadows Homeowners Association is $35.00 if payment is not received within 15 days after the Due Date.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:07:04.344Z"
+  },
+  {
+    "id": 17,
+    "user_id": 2,
+    "question": "What is the address",
+    "answer": "I'm sorry, but the provided HOA documents do not contain the address for the Pinecrest Meadows subdivision. I recommend checking any correspondence or official communications from the HOA for the address details. If you have any other questions, feel free to ask!",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:07:17.120Z"
+  },
+  {
+    "id": 18,
+    "user_id": 2,
+    "question": "Is there a pet policy",
+    "answer": "Yes, there is a pet policy outlined in the HOA documents. Domestic pets are permitted, but excessive noise, aggressive behavior, or failure to remove animal waste constitutes a violation. Livestock and breeding operations are prohibited.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:07:31.053Z"
+  },
+  {
+    "id": 19,
+    "user_id": 2,
+    "question": "What are the fines related to pets",
+    "answer": "Fines related to pets are not specifically mentioned in the provided HOA document. If you have any other questions or need further assistance, feel free to ask!",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:07:44.497Z"
+  },
+  {
+    "id": 20,
+    "user_id": 2,
+    "question": "What is the name of the HOA",
+    "answer": "The name of the HOA is Pinecrest Meadows Homeowners Association.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:08:11.086Z"
+  },
+  {
+    "id": 21,
+    "user_id": 2,
+    "question": "Is there parking available",
+    "answer": "Yes, parking is available within the Pinecrest Meadows subdivision. However, there are restrictions on parking certain vehicles like boats, RVs, trailers, or commercial vehicles in driveways or streets for more than 48 consecutive hours without approval. Inoperable vehicles must be stored in a garage.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:08:21.074Z"
+  },
+  {
+    "id": 22,
+    "user_id": 2,
+    "question": "What are the late fees",
+    "answer": "The late fees for the Oceanside Plaza Condominium Association include:\n- Late Fees: $25.72 for the current period\n- Late Fees: $1,250 for the year to date period\n\nIf you have any more questions or need further assistance, feel free to ask!",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"},{\"id\":2,\"name\":\"Boardwalk on the Parkway Condos Gov Docs.pdf\"},{\"id\":3,\"name\":\"Springmont Governing Documents.pdf\"},{\"id\":4,\"name\":\"Stonebriar Village Gov_Docs.pdf\"},{\"id\":5,\"name\":\"25-08-31 Oceanside Plaza Condo FS.pdf\"}]",
+    "created_at": "2025-10-26T14:10:57.420Z"
+  },
+  {
+    "id": 23,
+    "user_id": 2,
+    "question": "what is the name of the hoa",
+    "answer": "The name of the HOA is \"PINECREST MEADOWS HOMEOWNERS ASSOCIATION.\"",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"},{\"id\":2,\"name\":\"Boardwalk on the Parkway Condos Gov Docs.pdf\"},{\"id\":3,\"name\":\"Springmont Governing Documents.pdf\"},{\"id\":4,\"name\":\"Stonebriar Village Gov_Docs.pdf\"},{\"id\":5,\"name\":\"25-08-31 Oceanside Plaza Condo FS.pdf\"}]",
+    "created_at": "2025-10-26T14:19:40.880Z"
+  },
+  {
+    "id": 24,
+    "user_id": 2,
+    "question": "what are the late fees",
+    "answer": "Here is the breakdown of late fees mentioned in the HOA documents:\n\n- Late Fees: $35.00 shall be applied when payment is not received within 15 days after the Due Date.\n- Late Fees for Maintenance Fees: $25.72 for the current period and $16,844.33 year to date in the Oceanside Plaza Condo document.\n\nIf you have any further questions or need additional details, feel free to ask!",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"},{\"id\":2,\"name\":\"Boardwalk on the Parkway Condos Gov Docs.pdf\"},{\"id\":3,\"name\":\"Springmont Governing Documents.pdf\"},{\"id\":4,\"name\":\"Stonebriar Village Gov_Docs.pdf\"},{\"id\":5,\"name\":\"25-08-31 Oceanside Plaza Condo FS.pdf\"}]",
+    "created_at": "2025-10-26T14:19:51.957Z"
+  },
+  {
+    "id": 25,
+    "user_id": 1,
+    "question": "what is the late fee",
+    "answer": "The late fee for overdue payments is $35.00.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:27:21.679Z"
+  },
+  {
+    "id": 26,
+    "user_id": 1,
+    "question": "What is the name of the HOA",
+    "answer": "The name of the HOA is Pinecrest Meadows Homeowners Association.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:27:36.075Z"
+  },
+  {
+    "id": 27,
+    "user_id": 2,
+    "question": "what is the late fee",
+    "answer": "The late fee for HOA Dues in the Pinecrest Meadows subdivision is $35.00.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:27:53.433Z"
+  },
+  {
+    "id": 28,
+    "user_id": 2,
+    "question": "What is the name of the HOA",
+    "answer": "The name of the HOA is Pinecrest Meadows Homeowners Association.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:28:04.567Z"
+  },
+  {
+    "id": 29,
+    "user_id": 1,
+    "question": "What is the name of the HOA",
+    "answer": "The name of the HOA is Pinecrest Meadows Homeowners Association.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:34:12.151Z"
+  },
+  {
+    "id": 30,
+    "user_id": 1,
+    "question": "what are the late fees",
+    "answer": "The late fee for HOA dues in Pinecrest Meadows is $35.00, which is applied when payment is not received within 15 days after the Due Date.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:34:16.748Z"
+  },
+  {
+    "id": 31,
+    "user_id": 2,
+    "question": "What is the name of the HOA",
+    "answer": "The name of the HOA is Pinecrest Meadows Homeowners Association.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:34:33.298Z"
+  },
+  {
+    "id": 32,
+    "user_id": 2,
+    "question": "What are the late fees",
+    "answer": "The late fee for HOA dues in the Pinecrest Meadows subdivision is $35.00.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:34:38.559Z"
+  },
+  {
+    "id": 33,
+    "user_id": 1,
+    "question": "What is the name of the hoa",
+    "answer": "The name of the HOA is Pinecrest Meadows Homeowners Association.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:34:58.871Z"
+  },
+  {
+    "id": 34,
+    "user_id": 1,
+    "question": "What are the late fees",
+    "answer": "Late fees for the Pinecrest Meadows Homeowners Association are $35.00 and are applied when payment is not received within 15 days after the Due Date.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:35:03.972Z"
+  },
+  {
+    "id": 35,
+    "user_id": 1,
+    "question": "What is the name of the hoa",
+    "answer": "The name of the HOA is Stonebriar Village Homeowners Association.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Stonebriar Village Gov_Docs.pdf\"}]",
+    "created_at": "2025-10-26T14:37:20.568Z"
+  },
+  {
+    "id": 36,
+    "user_id": 1,
+    "question": "Are there any late fees",
+    "answer": "I'm sorry, but the information about late fees is not included in the provided HOA documents. If you have any other questions or need further assistance, feel free to ask!",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Stonebriar Village Gov_Docs.pdf\"}]",
+    "created_at": "2025-10-26T14:37:27.253Z"
+  },
+  {
+    "id": 37,
+    "user_id": 1,
+    "question": "Is there a pet policy",
+    "answer": "I'm sorry, but the provided HOA documents do not contain information about a pet policy. If you have any other questions or need further assistance, feel free to ask!",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Stonebriar Village Gov_Docs.pdf\"}]",
+    "created_at": "2025-10-26T14:37:33.696Z"
+  },
+  {
+    "id": 38,
+    "user_id": 1,
+    "question": "What is the name of the HOA",
+    "answer": "The name of the HOA is Pinecrest Meadows Homeowners Association.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:38:01.579Z"
+  },
+  {
+    "id": 39,
+    "user_id": 1,
+    "question": "What are the late fees",
+    "answer": "The late fee for overdue payments in the Pinecrest Meadows Homeowners Association is $35.00, and interest at a rate of 1.5% per month will accrue on the outstanding amount if the balance remains unpaid 30 days after the Due Date.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:38:07.156Z"
+  },
+  {
+    "id": 40,
+    "user_id": 2,
+    "question": "What are the late fees",
+    "answer": "The late fee for HOA dues is $35.00, which is applied when payment is not received within 15 days after the Due Date.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:38:38.982Z"
+  },
+  {
+    "id": 41,
+    "user_id": 1,
+    "question": "What is the name of the HOA",
+    "answer": "The name of the HOA is Pinecrest Meadows Homeowners Association.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:56:34.590Z"
+  },
+  {
+    "id": 42,
+    "user_id": 1,
+    "question": "What are the late fees",
+    "answer": "Late fees for the Pinecrest Meadows Homeowners Association are $35.00 and are applied when payment is not received within 15 days after the Due Date.",
+    "documents_referenced": "[{\"id\":1,\"name\":\"Pinecrest Sample CCR.pdf\"}]",
+    "created_at": "2025-10-26T14:56:40.276Z"
+  },
+  {
+    "user_id": 1,
+    "username": "manager",
+    "role": "manager",
+    "question": "What is the hoa name",
+    "answer": "The HOA name is Pinecrest Meadows Homeowners Association.",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T15:27:34.502Z"
+  },
+  {
+    "user_id": 1,
+    "username": "manager",
+    "role": "manager",
+    "question": "What is the hoa dues amount",
+    "answer": "The annual HOA dues amount for each Lot in the Pinecrest Meadows subdivision is $1,200.00 USD, billed in four equal quarterly installments of $300.00.",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T15:27:45.285Z"
+  },
+  {
+    "user_id": 1,
+    "username": "manager",
+    "role": "manager",
+    "question": "What are the late fees",
+    "answer": "The late fee for unpaid assessments in the Pinecrest Meadows Homeowners Association is $35.00 if payment is not received within 15 days after the Due Date.",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T15:27:53.285Z"
+  },
+  {
+    "user_id": 2,
+    "username": "resident",
+    "role": "resident",
+    "question": "What is the name of the community",
+    "answer": "The name of the community is Pinecrest Meadows.",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      },
+      {
+        "id": 2,
+        "name": "Stonebriar Village Gov_Docs.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T15:45:15.317Z"
+  },
+  {
+    "user_id": 2,
+    "username": "resident",
+    "role": "resident",
+    "question": "what are the late fees",
+    "answer": "Late fees for the Pinecrest Meadows Homeowners Association are $35.00 and are applied when payment is not received within 15 days after the Due Date. If the balance remains unpaid 30 days after the Due Date, interest accrues at 1.5% per month on the outstanding amount.",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      },
+      {
+        "id": 2,
+        "name": "Stonebriar Village Gov_Docs.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T15:45:26.445Z"
+  },
+  {
+    "user_id": 1,
+    "username": "manager",
+    "role": "manager",
+    "question": "What is the name of the HOA",
+    "answer": "The name of the HOA in the provided documents is \"Pinecrest Meadows Homeowners Association\" and \"Stonebriar Village Homeowners Association, Inc.\"",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      },
+      {
+        "id": 2,
+        "name": "Stonebriar Village Gov_Docs.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T15:45:54.189Z"
+  },
+  {
+    "user_id": 1,
+    "username": "manager",
+    "role": "manager",
+    "question": "What is the pet policy",
+    "answer": "I'm sorry, but the pet policy specific to the Pinecrest Meadows Homeowners Association is not provided in the documents. I recommend reaching out to the HOA directly for detailed information on the pet policy.",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      },
+      {
+        "id": 2,
+        "name": "Stonebriar Village Gov_Docs.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T15:46:01.482Z"
+  },
+  {
+    "user_id": 1,
+    "username": "manager",
+    "role": "manager",
+    "question": "What is the pet policy",
+    "answer": "The pet policy in Pinecrest Meadows Homeowners Association allows for domestic pets but prohibits livestock and breeding operations. Excessive noise, aggressive behavior, and failure to remove animal waste are considered violations.",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T15:46:30.248Z"
+  },
+  {
+    "user_id": 2,
+    "username": "resident",
+    "role": "resident",
+    "question": "What is the name of the HOA",
+    "answer": "The name of the first HOA is Pinecrest Meadows Homeowners Association, and the name of the second HOA is Stonebriar Village Homeowners Association.",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      },
+      {
+        "id": 3,
+        "name": "Stonebriar Village Gov_Docs.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T16:35:59.607Z"
+  },
+  {
+    "user_id": 2,
+    "username": "resident",
+    "role": "resident",
+    "question": "What are their addresses",
+    "answer": "The address for Pinecrest Meadows Homeowners Association is not explicitly provided in the documents. For Stonebriar Village Homeowners Association, the address is:\n\nSTONEBRIAR VILLAGE HOMEOWNERS ASSOCIATION\n2500 Legacy Drive, Suite 220\nFrisco, Texas 75034",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      },
+      {
+        "id": 3,
+        "name": "Stonebriar Village Gov_Docs.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T16:36:08.011Z"
+  },
+  {
+    "user_id": 2,
+    "username": "resident",
+    "role": "resident",
+    "question": "Does Pinecrest indicate a late fee",
+    "answer": "Yes, Pinecrest Meadows Homeowners Association imposes a $35.00 Late Fee if payment is not received within 15 days after the Due Date.",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      },
+      {
+        "id": 3,
+        "name": "Stonebriar Village Gov_Docs.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T16:36:24.062Z"
+  },
+  {
+    "user_id": 2,
+    "username": "resident",
+    "role": "resident",
+    "question": "What about Stonebriar",
+    "answer": "I'm sorry, but the provided documents for Stonebriar Village Homeowners Association do not contain specific rules or regulations similar to the Pinecrest Meadows Homeowners Association documents you provided. If you have any other questions or need further assistance, feel free to ask!",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      },
+      {
+        "id": 3,
+        "name": "Stonebriar Village Gov_Docs.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T16:36:31.621Z"
+  },
+  {
+    "user_id": 1,
+    "username": "manager",
+    "role": "manager",
+    "question": "What is the name of the community",
+    "answer": "The name of the community is Pinecrest Meadows.",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      },
+      {
+        "id": 3,
+        "name": "Stonebriar Village Gov_Docs.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T16:37:25.254Z"
+  },
+  {
+    "user_id": 1,
+    "username": "manager",
+    "role": "manager",
+    "question": "Does Stonebriar have an address",
+    "answer": "Yes, Stonebriar Village Homeowners Association's address is:\n2500 Legacy Drive, Suite 220\nFrisco, Texas 75034",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      },
+      {
+        "id": 3,
+        "name": "Stonebriar Village Gov_Docs.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T16:37:37.575Z"
+  },
+  {
+    "user_id": 1,
+    "username": "manager",
+    "role": "manager",
+    "question": "What about Pinecrest",
+    "answer": "I'm sorry, but the information provided does not include details about Pinecrest. If you have any other questions or need assistance, feel free to ask!",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      },
+      {
+        "id": 3,
+        "name": "Stonebriar Village Gov_Docs.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T16:37:46.087Z"
+  },
+  {
+    "user_id": 4,
+    "username": "guest",
+    "role": "manager",
+    "question": "What is the name of the HOA",
+    "answer": "The name of the HOA is Pinecrest Meadows Homeowners Association.",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T17:24:27.365Z"
+  },
+  {
+    "user_id": 4,
+    "username": "guest",
+    "role": "manager",
+    "question": "What are the late fees",
+    "answer": "The late fee for missed payments is $35.00, and if the balance remains unpaid 30 days after the Due Date, interest shall accrue at 1.5% per month on the outstanding amount.",
+    "documents_referenced": [
+      {
+        "id": 1,
+        "name": "Pinecrest Sample CCR.pdf"
+      }
+    ],
+    "created_at": "2025-10-26T17:24:33.570Z"
+  }
+]
