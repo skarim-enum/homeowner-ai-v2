@@ -1,11 +1,25 @@
-﻿# Environment files
+﻿# --- env & secrets ---
 .env
 .env.*
 !.env.example
-# Environment files
-.env
-.env.*
-!.env.example
-.env
-.env.*
-!.env.example
+
+# --- OS/editor junk ---
+*.log
+.DS_Store
+Thumbs.db
+
+# --- Node (remove if not JS/TS) ---
+node_modules/
+dist/
+build/
+coverage/
+
+# --- Python (remove if not Python) ---
+__pycache__/
+*.pyc
+.venv/
+env/
+
+# --- .NET (remove if not .NET) ---
+bin/
+obj/
