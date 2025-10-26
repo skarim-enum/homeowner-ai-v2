@@ -7,7 +7,6 @@
 ✅ Beautiful badges - Purple gradient badges for community names
 ✅ Works for both - Single and bulk uploads
 
-
 #v1.7
 #Bulk Delete
 ✅ Checkbox selection for each document
@@ -21,8 +20,8 @@
 ✅ Individual delete still available for single documents
 
 
-# v1.6
-# Duplicate detection
+#v1.6
+#Duplicate detection
 ✅ Automatic duplicate detection based on filename
 ✅ Warning modal for single file uploads before processing
 ✅ Choice to proceed or cancel upload
@@ -32,9 +31,8 @@
 ✅ Within-batch duplicate prevention (can't upload same file twice in one batch)
 ✅ Clean error messages explaining why files were skipped
 
-# v1.5
-# Bulk Upload Confirmation Modal - Update Guide
-### New Features:
+#v1.5
+#Bulk Upload Confirmation Modal - Update Guide
 ✅ Animated modal popup after bulk upload
 ✅ Visual summary cards (Total, Successful, Failed)
 ✅ Detailed list of successfully uploaded files
