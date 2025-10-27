@@ -10,8 +10,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 const OpenAI = require('openai');
-const pdfParse = require('pdf-parse');
-const mammoth = require('mammoth');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -140,7 +138,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: parseInt(process.env.MAX_FILE_SIZE) || 52428800 },
+  limits: { fileSize: 500 * 1024 * 1024 }, // 500MB limit for Textract async API
   fileFilter: (req, file, cb) => {
     const allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword'];
     if (allowedTypes.includes(file.mimetype)) {
@@ -180,31 +178,7 @@ function authorizeRole(allowedRoles) {
 }
 
 // Extract text from uploaded files
-async function extractTextFromFile(filePath, fileType) {
-  try {
-    if (fileType === 'application/pdf') {
-      const dataBuffer = fs.readFileSync(filePath);
-      const data = await pdfParse(dataBuffer);
-      return data.text;
-    } else if (fileType.includes('word') || fileType.includes('document')) {
-      const result = await mammoth.extractRawText({ path: filePath });
-      return result.value;
-    }
-    return '';
-  } catch (error) {
-    console.error('Error extracting text:', error);
-    return '';
-  }
-}
-
-// Truncate text to fit within token limits
-function truncateText(text, maxTokens = 8000) {
-  const maxChars = maxTokens * 4;
-  if (text.length <= maxChars) {
-    return text;
-  }
-  return text.substring(0, maxChars) + '\n... (document truncated due to length)';
-}
+const { extractTextFromFile, truncateText, uploadToS3, deleteFromS3 } = require('./utils/fileExtractor');
 
 // ==================== API ROUTES ====================
 
@@ -355,6 +329,7 @@ app.post('/api/documents/upload', authenticateToken, authorizeRole(['manager']),
     }
 
     console.log('📄 Processing file:', req.file.originalname);
+    console.log(`📦 File size: ${(req.file.size / 1024 / 1024).toFixed(2)}MB`);
 
     // Get community name from request (optional)
     const communityName = req.body.community_name ? req.body.community_name.trim() : null;
@@ -377,20 +352,38 @@ app.post('/api/documents/upload', authenticateToken, authorizeRole(['manager']),
       });
     }
 
-    // Extract text from the document
-    const extractedText = await extractTextFromFile(req.file.path, req.file.mimetype);
+    // Upload to S3
+    let s3Key;
+    try {
+      s3Key = await uploadToS3(req.file.path, req.file.filename);
+      console.log('✅ File uploaded to S3:', s3Key);
+    } catch (s3Error) {
+      console.error('❌ S3 upload failed:', s3Error.message);
+      fs.unlinkSync(req.file.path);
+      return res.status(500).json({ error: 'Failed to upload file to S3: ' + s3Error.message });
+    }
+
+    // Extract text from the document using S3 reference (pass file size for optimization)
+    const extractedText = await extractTextFromFile(s3Key, req.file.mimetype, true, req.file.size);
     
     if (!extractedText || extractedText.trim().length === 0) {
+      // Clean up S3 file if extraction failed
+      await deleteFromS3(s3Key);
       fs.unlinkSync(req.file.path);
       return res.status(400).json({ error: 'Could not extract text from document' });
     }
+
+    // Clean up local file after successful S3 upload and extraction
+    fs.unlinkSync(req.file.path);
+    console.log('🗑️  Local file cleaned up:', req.file.path);
 
     // Add document to storage
     const newDocument = {
       id: documents.length + 1,
       filename: req.file.filename,
       original_name: req.file.originalname,
-      file_path: req.file.path,
+      s3_key: s3Key, // Store S3 key instead of local path
+      file_path: `s3://${process.env.AWS_S3_BUCKET}/${s3Key}`, // Full S3 path for reference
       file_type: req.file.mimetype,
       file_size: req.file.size,
       extracted_text: extractedText,
@@ -409,11 +402,16 @@ app.post('/api/documents/upload', authenticateToken, authorizeRole(['manager']),
         original_name: req.file.originalname,
         file_size: req.file.size,
         file_type: req.file.mimetype,
-        community_name: communityName
+        community_name: communityName,
+        s3_key: s3Key
       }
     });
   } catch (error) {
     console.error('Upload error:', error);
+    // Clean up local file if exists
+    if (req.file && req.file.path && fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
     res.status(500).json({ error: error.message });
   }
 });
@@ -447,74 +445,132 @@ app.post('/api/documents/bulk-upload', authenticateToken, authorizeRole(['manage
     const existingNames = documents.map(doc => doc.original_name.toLowerCase());
     let nextId = documents.length > 0 ? Math.max(...documents.map(d => d.id)) + 1 : 1;
 
-    // Process each file
-    for (const file of req.files) {
+    console.log('⚡ Processing files in parallel for faster upload...');
+
+    // Process all files in parallel using Promise.allSettled
+    const processingPromises = req.files.map(async (file) => {
       try {
-        console.log(`📄 Processing: ${file.originalname}`);
+        console.log(`📄 Starting: ${file.originalname} (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
 
         // Check for duplicate
         const isDuplicate = existingNames.includes(file.originalname.toLowerCase());
         
         if (isDuplicate) {
-          fs.unlinkSync(file.path); // Clean up uploaded file
-          results.duplicates.push({
+          fs.unlinkSync(file.path);
+          return {
+            status: 'duplicate',
             filename: file.originalname,
             error: 'Duplicate document - file with this name already exists'
-          });
-          console.log(`⚠️  Duplicate detected: ${file.originalname}`);
-          continue;
+          };
         }
 
-        // Extract text from the document
-        const extractedText = await extractTextFromFile(file.path, file.mimetype);
+        // Upload to S3
+        let s3Key;
+        try {
+          s3Key = await uploadToS3(file.path, file.filename);
+          console.log(`✅ S3 upload complete: ${file.originalname}`);
+        } catch (s3Error) {
+          console.error(`❌ S3 upload failed for ${file.originalname}:`, s3Error.message);
+          fs.unlinkSync(file.path);
+          return {
+            status: 'failed',
+            filename: file.originalname,
+            error: 'Failed to upload to S3: ' + s3Error.message
+          };
+        }
+
+        // Extract text from the document using S3 reference (happens in parallel, pass size for optimization)
+        const extractedText = await extractTextFromFile(s3Key, file.mimetype, true, file.size);
         
         if (!extractedText || extractedText.trim().length === 0) {
+          await deleteFromS3(s3Key);
           fs.unlinkSync(file.path);
-          results.failed.push({
+          return {
+            status: 'failed',
             filename: file.originalname,
             error: 'Could not extract text from document'
-          });
-          continue;
+          };
         }
 
-        // Add document to storage
-        const newDocument = {
-          id: nextId++,
-          filename: file.filename,
-          original_name: file.originalname,
-          file_path: file.path,
-          file_type: file.mimetype,
-          file_size: file.size,
-          extracted_text: extractedText,
-          community_name: communityName,
-          uploaded_by: req.user.id,
-          uploaded_at: new Date().toISOString()
-        };
-        documents.push(newDocument);
-        existingNames.push(file.originalname.toLowerCase()); // Track newly added to prevent duplicates within the batch
-
-        results.successful.push({
-          id: newDocument.id,
-          filename: file.filename,
-          original_name: file.originalname,
-          file_size: file.size,
-          file_type: file.mimetype,
-          community_name: communityName
-        });
+        // Clean up local file after successful S3 upload and extraction
+        fs.unlinkSync(file.path);
 
         console.log(`✅ Successfully processed: ${file.originalname}`);
+        
+        return {
+          status: 'success',
+          data: {
+            filename: file.filename,
+            original_name: file.originalname,
+            s3_key: s3Key,
+            file_path: `s3://${process.env.AWS_S3_BUCKET}/${s3Key}`,
+            file_type: file.mimetype,
+            file_size: file.size,
+            extracted_text: extractedText,
+            community_name: communityName,
+            uploaded_by: req.user.id,
+            uploaded_at: new Date().toISOString()
+          }
+        };
+        
       } catch (error) {
         console.error(`❌ Error processing ${file.originalname}:`, error);
         // Clean up file if it exists
         if (fs.existsSync(file.path)) {
           fs.unlinkSync(file.path);
         }
-        results.failed.push({
+        return {
+          status: 'failed',
           filename: file.originalname,
           error: error.message
+        };
+      }
+    });
+
+    // Wait for all files to complete processing
+    const settledResults = await Promise.allSettled(processingPromises);
+
+    // Categorize results
+    settledResults.forEach((result, index) => {
+      if (result.status === 'fulfilled') {
+        const fileResult = result.value;
+        
+        if (fileResult.status === 'success') {
+          const newDocument = {
+            id: nextId++,
+            ...fileResult.data
+          };
+          documents.push(newDocument);
+          existingNames.push(fileResult.data.original_name.toLowerCase());
+          
+          results.successful.push({
+            id: newDocument.id,
+            filename: fileResult.data.filename,
+            original_name: fileResult.data.original_name,
+            file_size: fileResult.data.file_size,
+            file_type: fileResult.data.file_type,
+            community_name: communityName,
+            s3_key: fileResult.data.s3_key
+          });
+        } else if (fileResult.status === 'duplicate') {
+          results.duplicates.push({
+            filename: fileResult.filename,
+            error: fileResult.error
+          });
+        } else if (fileResult.status === 'failed') {
+          results.failed.push({
+            filename: fileResult.filename,
+            error: fileResult.error
+          });
+        }
+      } else {
+        // Promise rejected
+        results.failed.push({
+          filename: req.files[index].originalname,
+          error: result.reason?.message || 'Unknown error'
         });
       }
-    }
+    });
 
     // Save all successfully processed documents
     if (results.successful.length > 0) {
@@ -563,27 +619,37 @@ app.get('/api/documents', authenticateToken, (req, res) => {
 });
 
 // Delete document (managers only)
-app.delete('/api/documents/:id', authenticateToken, authorizeRole(['manager']), (req, res) => {
-  const documentId = parseInt(req.params.id);
-  const documents = readDocuments();
-  const docIndex = documents.findIndex(d => d.id === documentId);
+app.delete('/api/documents/:id', authenticateToken, authorizeRole(['manager']), async (req, res) => {
+  try {
+    const documentId = parseInt(req.params.id);
+    const documents = readDocuments();
+    const docIndex = documents.findIndex(d => d.id === documentId);
 
-  if (docIndex === -1) {
-    return res.status(404).json({ error: 'Document not found' });
+    if (docIndex === -1) {
+      return res.status(404).json({ error: 'Document not found' });
+    }
+
+    const doc = documents[docIndex];
+
+    // Delete file from S3 if s3_key exists
+    if (doc.s3_key) {
+      await deleteFromS3(doc.s3_key);
+    }
+    
+    // Also delete from local filesystem if path exists (for backward compatibility)
+    if (doc.file_path && !doc.file_path.startsWith('s3://') && fs.existsSync(doc.file_path)) {
+      fs.unlinkSync(doc.file_path);
+    }
+
+    // Remove from storage
+    documents.splice(docIndex, 1);
+    writeDocuments(documents);
+
+    res.json({ message: 'Document deleted successfully' });
+  } catch (error) {
+    console.error('Delete error:', error);
+    res.status(500).json({ error: error.message });
   }
-
-  const doc = documents[docIndex];
-
-  // Delete file from filesystem
-  if (fs.existsSync(doc.file_path)) {
-    fs.unlinkSync(doc.file_path);
-  }
-
-  // Remove from storage
-  documents.splice(docIndex, 1);
-  writeDocuments(documents);
-
-  res.json({ message: 'Document deleted successfully' });
 });
 
 // Update document community name
@@ -766,8 +832,18 @@ app.post('/api/reports/late-fee-summary', authenticateToken, authorizeRole(['man
       try {
         console.log(`📄 Processing: ${doc.original_name}`);
         
-        // Extract text from document
-        const text = await extractTextFromFile(doc.file_path, doc.file_type);
+        // Use cached extracted text if available, otherwise extract from S3
+        let text;
+        if (doc.extracted_text && doc.extracted_text.trim().length > 0) {
+          text = doc.extracted_text;
+          console.log(`✅ Using cached text (${text.length} characters)`);
+        } else if (doc.s3_key) {
+          // Extract from S3 if text not cached
+          text = await extractTextFromFile(doc.s3_key, doc.file_type, true);
+        } else if (doc.file_path && !doc.file_path.startsWith('s3://')) {
+          // Fallback to local file extraction (for old documents)
+          text = await extractTextFromFile(doc.file_path, doc.file_type, false);
+        }
         
         if (!text || text.trim().length === 0) {
           console.log(`⚠️  No text extracted from ${doc.original_name}`);

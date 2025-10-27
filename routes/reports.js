@@ -3,7 +3,7 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const OpenAI = require('openai');
-const { extractTextFromFile } = require('../utils/textExtraction');
+const { extractTextFromFile } = require('../utils/fileExtractor');
 
 // Initialize OpenAI
 const openai = new OpenAI({

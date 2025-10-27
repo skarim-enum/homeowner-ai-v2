@@ -75,8 +75,8 @@ router.post('/upload', authenticateToken, authorizeRole(['manager']), upload.sin
         : 'COMMUNITY NAME';
       console.log('🏘️  Using manual community name:', communityName);
     } else {
-      // Auto-extract mode: extract from document text using OpenAI
-      communityName = await extractCommunityName(extractedText);
+      // Auto-extract mode: extract from document text (already extracted by Textract)
+      communityName = extractCommunityName(extractedText);
       if (communityName) {
         console.log('🏘️  Extracted community name:', communityName);
       } else {
@@ -179,8 +179,8 @@ router.post('/bulk-upload', authenticateToken, authorizeRole(['manager']), uploa
             : 'COMMUNITY NAME';
           console.log(`🏘️  Using manual community name for ${file.originalname}:`, communityName);
         } else {
-          // Auto-extract mode: extract from document text using OpenAI
-          communityName = await extractCommunityName(extractedText);
+          // Auto-extract mode: extract from document text (already extracted by Textract)
+          communityName = extractCommunityName(extractedText);
           if (communityName) {
             console.log(`🏘️  Extracted community name from ${file.originalname}:`, communityName);
           } else {
